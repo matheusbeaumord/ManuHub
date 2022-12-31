@@ -46,6 +46,17 @@ class User(UserMixin, db.Model):
         return User.query.get(int(id))
 
 
+class Menu(db.Model):
+    # primary keys are required by SQLAlchemy
+    id = db.Column(db.Integer, primary_key=True)
+    nome = db.Column(db.String(64), index=True)
+    categoria = db.Column(db.String(120), index=True, unique=True)
+    valor = db.Column(db.Integer())
+
+    def load_menu(id):
+        return Menu.query.get(int(id))
+
+
 # applications routes.
 @app.route("/")
 def index():
@@ -75,7 +86,7 @@ def login_post():
 
     # if the above check passes, then we know the user has the right credentials
     login_user(user, remember=remember)
-    return redirect(url_for('profile'))
+    return redirect(url_for('menu'))
 
 
 @app.route('/signup')
@@ -109,13 +120,41 @@ def signup_post():
     return redirect(url_for('login'))
 
 
-@app.route('/profile')
+@app.route('/menu')
 @login_required
-def profile():
-    return render_template('profile.html', name=current_user.username)
+def menu():
+    return render_template('menu.html', name=current_user.username)
+
+
+@app.route('/menu', methods=['POST'])
+def menu_post():
+    nome = request.form.get('nome')
+    categoria = request.form.get('categoria')
+    valor = request.form.get('valor')
+
+    prato = Menu.query.filter_by(nome=nome).first()
+
+    if prato:
+        flash('Um prato com esse nome ja foi cadastrado')
+        return redirect(url_for('menu'))
+
+    new_prato = Menu(nome=nome, categoria=categoria,
+                     valor=valor)
+
+    # add the new user to the database
+    db.session.add(new_prato)
+    db.session.commit()
+
+    flash('Success')
+    return redirect(url_for('menu'))
 
 
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
+
+
+if __name__ == '__main__':
+    db.create_all()
+    app.run(debug=True)

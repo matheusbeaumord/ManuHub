@@ -1,0 +1,63 @@
+{% extends "application.html" %}
+
+{% block html_attribs %} lang pt_BR="BR"{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="container">
+  <div class="container">
+    <form method="POST" action="/menu">
+      <div class="form-group">
+        <label for="exampleFormControlInput1">Nome do prato</label>
+        <input type="email" class="form-control" id="nome" name="nome">
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlSelect1">Categoria</label>
+        <select class="form-control" id="categoria" name="categoria">
+          <option name="entrada">Entrada</option>
+          <option name="principal">Principal</option>
+          <option name="sobremesa">Sobremesa</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label for="exampleFormControlTextarea1">Valor</label>
+        <input type="number" class="form-control" id="valor" name="valor"></textarea>
+      </div>
+      <button type="button" class="btn btn-primary">Salvar</button>
+    </form>
+  </div >
+  <div class="container">
+    <table class="table table-striped">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Nome</th>
+          <th scope="col">Categoria</th>
+          <th scope="col">Preço</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">1</th>
+          <td>Mark</td>
+          <td>Otto</td>
+          <td>@mdo</td>
+        </tr>
+        <tr>
+          <th scope="row">2</th>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <th scope="row">3</th>
+          <td>Larry</td>
+          <td>the Bird</td>
+          <td>@twitter</td>
+        </tr>
+      </tbody>
+    </table>
+  </div >
+</div>
+{% endblock %}
