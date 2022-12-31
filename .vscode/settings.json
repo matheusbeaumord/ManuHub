@@ -1,0 +1,17 @@
+{
+  "sqltools.connections": [
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "test",
+      "database": "\\\\wsl$\\Ubuntu-20.04\\home\\matheus\\Puc Minas\\Python\\MenuHub\\instance\\db.sqlite"
+    },
+    {
+      "previewLimit": 50,
+      "driver": "SQLite",
+      "name": "teste",
+      "database": "\\\\wsl$\\Ubuntu-20.04\\home\\matheus\\Puc Minas\\Python\\MenuHub\\instance\\app.db"
+    }
+  ],
+  "sqltools.useNodeRuntime": true
+}

@@ -1,0 +1,29 @@
+{% extends "application.html" %}
+
+{% block html_attribs %} lang pt_BR="BR"{% endblock %}
+
+{% block title %}Index{% endblock %}
+
+{% block content %}
+<div class="container">
+  <form method="POST" action="/edit/{{ prato.id }}">
+    <div class="form-group">
+      <label for="exampleFormControlInput1">Nome do prato</label>
+      <input class="form-control" id="nome" name="nome" value="{{ prato.nome }}">
+    </div>
+    <div class="form-group">
+      <label for="exampleFormControlSelect1">Categoria</label>
+      <select class="form-control" id="categoria" name="categoria" selected="{{ prato.categoria }}">
+        <option name="entrada">Entrada</option>
+        <option name="principal">Principal</option>
+        <option name="sobremesa">Sobremesa</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label for="exampleFormControlTextarea1">Valor</label>
+      <input type="number" class="form-control" id="valor" name="valor" value="{{ prato.valor }}"></textarea>
+    </div>
+    <button class="btn btn-primary">Salvar</button>
+  </form>
+</div>
+{% endblock %}

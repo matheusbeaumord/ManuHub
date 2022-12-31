@@ -48,16 +48,25 @@ class User(UserMixin, db.Model):
 
 class Menu(db.Model):
     # primary keys are required by SQLAlchemy
-    id = db.Column(db.Integer, primary_key=True)
+    id = db.Column(db.Integer, primary_key=True, unique=True)
     nome = db.Column(db.String(64), index=True)
-    categoria = db.Column(db.String(120), index=True, unique=True)
+    categoria = db.Column(db.String(120))
     valor = db.Column(db.Integer())
 
-    def load_menu(id):
-        return Menu.query.get(int(id))
+    def __init__(self, nome, categoria, valor):
+        self.nome = nome
+        self.categoria = categoria
+        self.valor = valor
 
+
+with app.app_context():
+    if __name__ == '__main__':
+        db.create_all()
+        app.run(debug=True)
 
 # applications routes.
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -123,7 +132,8 @@ def signup_post():
 @app.route('/menu')
 @login_required
 def menu():
-    return render_template('menu.html', name=current_user.username)
+    pratos = Menu.query.all()
+    return render_template('menu.html', pratos=pratos)
 
 
 @app.route('/menu', methods=['POST'])
@@ -135,6 +145,7 @@ def menu_post():
     prato = Menu.query.filter_by(nome=nome).first()
 
     if prato:
+        print('entrou no if')
         flash('Um prato com esse nome ja foi cadastrado')
         return redirect(url_for('menu'))
 
@@ -149,12 +160,30 @@ def menu_post():
     return redirect(url_for('menu'))
 
 
+@app.route('/delete/<int:id>')
+def delete(id):
+    prato = Menu.query.get(id)
+    db.session.delete(prato)
+    db.session.commit()
+    return redirect(url_for('menu'))
+
+
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    prato = Menu.query.get(id)
+
+    if request.method == 'POST':
+        prato.nome = request.form.get('nome')
+        prato.categoria = request.form.get('categoria')
+        prato.valor = request.form.get('valor')
+
+        db.session.commit()
+
+        return redirect(url_for('menu'))
+    return render_template('edit.html', prato=prato)
+
+
 @app.route('/logout')
 def logout():
     logout_user()
     return redirect(url_for('index'))
-
-
-if __name__ == '__main__':
-    db.create_all()
-    app.run(debug=True)
