@@ -136,6 +136,22 @@ def menu():
     return render_template('menu.html', pratos=pratos)
 
 
+@app.route('/search', methods=['GET', 'POST'])
+def search():
+
+    if request.method == 'POST':
+
+        value = request.form.get('search')
+        pratos = Menu.query
+        prato = pratos.filter(Menu.nome.like('%' + value + '%'))
+        prato = prato.order_by(Menu.id).all()
+        if prato:
+            return render_template('search.html', pratos=prato)
+        return render_template('search.html', message='Desculpe, nao encontramos nenhum prato com este nome')
+
+    return render_template('search.html')
+
+
 @app.route('/menu', methods=['POST'])
 def menu_post():
     nome = request.form.get('nome')

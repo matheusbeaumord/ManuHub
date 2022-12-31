@@ -1,0 +1,44 @@
+{% extends "application.html" %} {% block html_attribs %} lang pt_BR="BR"{%
+endblock %} {% block title %}Index{% endblock %} {% block content %}
+<div class="container">
+  <form class="d-flex" method="POST" action="{{ url_for('search') }}">
+    <input
+      class="form-control me-2"
+      type="search"
+      placeholder="Search"
+      name="search"
+    />
+    </br>
+    <button class="btn btn-success" type="submit">Sarch</button>
+  </form>
+  <br />
+  {% if message %}
+  <p>{{ message }}</p>
+  {% endif %}
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Nome</th>
+        <th scope="col">Categoria</th>
+        <th scope="col">Preço</th>
+        <th scope="col">Ações</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in pratos %}
+      <tr>
+        <th scope="row">{{e.id}}</th>
+        <td>{{e.nome}}</td>
+        <td>{{e.categoria}}</td>
+        <td>{{e.valor}}</td>
+        <td>
+          <a href="/edit/{{e.id}}">Editar</a>
+          <a href="/delete/{{e.id}}">Excluir</a>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
